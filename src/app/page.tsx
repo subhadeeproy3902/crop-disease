@@ -78,19 +78,22 @@ export default function CropPage() {
       generate([image])
         .then((result) => {
           setResult(result);
-          console.log(result.disease);
-          console.log(result.cause);
-          console.log(result.precautions);
+          setDisease(result.disease);
+          setCause(result.cause);
+          setPrecautions(result.precautions);
           setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
+          setDisease(
+            "Cannot read the image provided. Might be its too hazy or the image is too large."
+          );
           setIsLoading(false);
         });
     }
   };
 
-  console.log(disease, cause, precautions);
+  console.log(result);
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -157,6 +160,16 @@ export default function CropPage() {
                 </CardContent>
               </Card>
             )}
+          {!result && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Detection Results</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>{disease}</p>
+              </CardContent>
+            </Card>
+          )}
           {result &&
             !isLoading &&
             result.disease === "No crop disease detected." && (
